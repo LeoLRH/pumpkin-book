@@ -31,8 +31,8 @@ $$
     & = \cfrac{\sum_{i=1}^{m}(x_i-\bar{x})(y_i-\bar{y})}{\sum_{i=1}^{m}(x_i-\bar{x})^2} 
 \end{aligned}
 $$
-若令$ \mathbf{X}=(x_1,x_2,...,x_m) $，$\mathbf{X}_{demean}$为去均值后的$ \mathbf{X} $，$ \mathbf{y}=(y_1,y_2,...,y_m) $，$ \mathbf{y}_{demean} $为去均值后的$ \mathbf{y} $，其中$ \mathbf{X} $、$ \mathbf{X}_{demean} $、$ \mathbf{y} $、$ \mathbf{y}_{demean} $均为m行1列的列向量，代入上式可得：
-$$ w=\cfrac{\mathbf{X}_{demean}\mathbf{y}_{demean}^T}{\mathbf{X}_{demean}\mathbf{X}_{demean}^T}$$
+若令$ \boldsymbol{x}=(x_1,x_2,...,x_m) $，$ \boldsymbol{x}_{d} $为去均值后的$ \boldsymbol{x} $，$ \boldsymbol{y}=(y_1,y_2,...,y_m) $，$ \boldsymbol{y}_{d} $为去均值后的$ \boldsymbol{y} $，其中$ \boldsymbol{x} $、$ \boldsymbol{x}_{d} $、$ \boldsymbol{y} $、$ \boldsymbol{y}_{d} $均为m行1列的列向量，代入上式可得：
+$$ w=\cfrac{\boldsymbol{y}_{d}^T\boldsymbol{x}_{d}}{\boldsymbol{x}_d^T\boldsymbol{x}_{d}}$$
 ## 3.10
 
 $$ \cfrac{\partial E_{\hat{w}}}{\partial \hat{w}}=2\mathbf{X}^T(\mathbf{X}\hat{w}-\mathbf{y}) $$
@@ -107,3 +107,24 @@ $$\begin{aligned}
 又$\boldsymbol S_b=\boldsymbol S_b^T,\boldsymbol S_w=\boldsymbol S_w^T$，则：
 $$\cfrac{\partial l(\boldsymbol w)}{\partial \boldsymbol w} = -2\boldsymbol S_b\boldsymbol w+2\lambda\boldsymbol S_w\boldsymbol w$$
 令导函数等于0即可得式3.37。
+
+## 3.43
+
+$$\begin{aligned}
+\boldsymbol S_b &= \boldsymbol S_t - \boldsymbol S_w \\
+&= \sum_{i=1}^N m_i(\boldsymbol\mu_i-\boldsymbol\mu)(\boldsymbol\mu_i-\boldsymbol\mu)^T
+\end{aligned}$$
+[推导]：由式3.40、3.41、3.42可得：
+$$\begin{aligned}
+\boldsymbol S_b &= \boldsymbol S_t - \boldsymbol S_w \\
+&= \sum_{i=1}^m(\boldsymbol x_i-\boldsymbol\mu)(\boldsymbol x_i-\boldsymbol\mu)^T-\sum_{i=1}^N\sum_{\boldsymbol x\in X_i}(\boldsymbol x-\boldsymbol\mu_i)(\boldsymbol x-\boldsymbol\mu_i)^T \\
+&= \sum_{i=1}^N\left(\sum_{\boldsymbol x\in X_i}\left((\boldsymbol x-\boldsymbol\mu)(\boldsymbol x-\boldsymbol\mu)^T-(\boldsymbol x-\boldsymbol\mu_i)(\boldsymbol x-\boldsymbol\mu_i)^T\right)\right) \\
+&= \sum_{i=1}^N\left(\sum_{\boldsymbol x\in X_i}\left((\boldsymbol x-\boldsymbol\mu)(\boldsymbol x^T-\boldsymbol\mu^T)-(\boldsymbol x-\boldsymbol\mu_i)(\boldsymbol x^T-\boldsymbol\mu_i^T)\right)\right) \\
+&= \sum_{i=1}^N\left(\sum_{\boldsymbol x\in X_i}\left(\boldsymbol x\boldsymbol x^T - \boldsymbol x\boldsymbol\mu^T-\boldsymbol\mu\boldsymbol x^T+\boldsymbol\mu\boldsymbol\mu^T-\boldsymbol x\boldsymbol x^T+\boldsymbol x\boldsymbol\mu_i^T+\boldsymbol\mu_i\boldsymbol x^T-\boldsymbol\mu_i\boldsymbol\mu_i^T\right)\right) \\
+&= \sum_{i=1}^N\left(\sum_{\boldsymbol x\in X_i}\left(- \boldsymbol x\boldsymbol\mu^T-\boldsymbol\mu\boldsymbol x^T+\boldsymbol\mu\boldsymbol\mu^T+\boldsymbol x\boldsymbol\mu_i^T+\boldsymbol\mu_i\boldsymbol x^T-\boldsymbol\mu_i\boldsymbol\mu_i^T\right)\right) \\
+&= \sum_{i=1}^N\left(-\sum_{\boldsymbol x\in X_i}\boldsymbol x\boldsymbol\mu^T-\sum_{\boldsymbol x\in X_i}\boldsymbol\mu\boldsymbol x^T+\sum_{\boldsymbol x\in X_i}\boldsymbol\mu\boldsymbol\mu^T+\sum_{\boldsymbol x\in X_i}\boldsymbol x\boldsymbol\mu_i^T+\sum_{\boldsymbol x\in X_i}\boldsymbol\mu_i\boldsymbol x^T-\sum_{\boldsymbol x\in X_i}\boldsymbol\mu_i\boldsymbol\mu_i^T\right) \\
+&= \sum_{i=1}^N\left(-m_i\boldsymbol\mu_i\boldsymbol\mu^T-m_i\boldsymbol\mu\boldsymbol\mu_i^T+m_i\boldsymbol\mu\boldsymbol\mu^T+m_i\boldsymbol\mu_i\boldsymbol\mu_i^T+m_i\boldsymbol\mu_i\boldsymbol\mu_i^T-m_i\boldsymbol\mu_i\boldsymbol\mu_i^T\right) \\
+&= \sum_{i=1}^N\left(-m_i\boldsymbol\mu_i\boldsymbol\mu^T-m_i\boldsymbol\mu\boldsymbol\mu_i^T+m_i\boldsymbol\mu\boldsymbol\mu^T+m_i\boldsymbol\mu_i\boldsymbol\mu_i^T\right) \\
+&= \sum_{i=1}^Nm_i\left(-\boldsymbol\mu_i\boldsymbol\mu^T-\boldsymbol\mu\boldsymbol\mu_i^T+\boldsymbol\mu\boldsymbol\mu^T+\boldsymbol\mu_i\boldsymbol\mu_i^T\right) \\
+&= \sum_{i=1}^N m_i(\boldsymbol\mu_i-\boldsymbol\mu)(\boldsymbol\mu_i-\boldsymbol\mu)^T
+\end{aligned}$$
